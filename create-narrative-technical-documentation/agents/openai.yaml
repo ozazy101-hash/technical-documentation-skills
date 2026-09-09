@@ -1,0 +1,4 @@
+interface:
+  display_name: "Narrative Technical Documentation"
+  short_description: "Design narrative-first technical HTML documentation"
+  default_prompt: "Use $create-narrative-technical-documentation to analyze this technical material, recommend a focused visual narrative, and create a self-contained HTML document."
