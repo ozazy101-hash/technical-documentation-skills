@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Technical reference for {{SYSTEM_NAME}}">
+  <title>{{DOC_TITLE}} · {{SYSTEM_NAME}}</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b5447'/%3E%3Cpath d='M18 19h28v7H18zm0 12h20v7H18zm0 12h28v7H18z' fill='white'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f1ec;
+      --surface: #fbfaf7;
+      --surface-strong: #ffffff;
+      --surface-recessed: #ebe8e1;
+      --text: #19221f;
+      --text-dim: #5d6863;
+      --border: #d4d2ca;
+      --accent: #1b5447;
+      --accent-soft: #dce9e4;
+      --info: #225a80;
+      --success: #2d6b4f;
+      --warning: #946515;
+      --danger: #9c3f3f;
+      --unknown: #6f6877;
+      --shadow: 0 16px 38px rgba(31, 42, 38, .08);
+      --radius: 10px;
+      --sidebar: 17rem;
+      --measure: 72ch;
+      --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #151b19;
+      --surface: #1c2421;
+      --surface-strong: #222c28;
+      --surface-recessed: #121714;
+      --text: #edf2ef;
+      --text-dim: #aab6b0;
+      --border: #36433e;
+      --accent: #88c8b5;
+      --accent-soft: #263f37;
+      --info: #8cc5e9;
+      --success: #90d0ad;
+      --warning: #e2bd76;
+      --danger: #ef9a9a;
+      --unknown: #c5b6ce;
+      --shadow: 0 18px 42px rgba(0, 0, 0, .22);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.62 var(--sans);
+      text-rendering: optimizeLegibility;
+    }
+    button, input { font: inherit; }
+    a { color: var(--accent); text-underline-offset: .18em; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 70%, white); outline-offset: 3px; }
+    code, pre, .mono { font-family: var(--mono); }
+    code { font-size: .91em; overflow-wrap: anywhere; }
+    .doc-shell { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); min-height: 100vh; }
+
+    .doc-sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 1.4rem 1.25rem;
+      background: var(--surface-recessed);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .doc-brand { margin-bottom: 1.6rem; }
+    .doc-kicker { margin: 0 0 .35rem; color: var(--accent); font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .doc-brand strong { display: block; font-size: 1.04rem; line-height: 1.3; }
+    .doc-brand small { color: var(--text-dim); }
+    .doc-search { display: grid; gap: .4rem; margin-bottom: 1.25rem; }
+    .doc-search label { color: var(--text-dim); font-size: .76rem; font-weight: 650; }
+    .doc-search input {
+      width: 100%; min-width: 0; padding: .66rem .72rem;
+      border: 1px solid var(--border); border-radius: 7px;
+      background: var(--surface); color: var(--text);
+    }
+    .doc-nav h2 { margin: 0 0 .55rem; color: var(--text-dim); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+    .doc-nav ul { display: grid; gap: .16rem; margin: 0; padding: 0; list-style: none; }
+    .doc-nav a { display: block; padding: .46rem .55rem; border-radius: 6px; color: var(--text-dim); font-size: .88rem; text-decoration: none; }
+    .doc-nav a:hover, .doc-nav a[aria-current="location"] { color: var(--text); background: var(--surface); }
+    .doc-sidebar-footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+    .doc-button {
+      display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+      min-height: 2.2rem; padding: .46rem .72rem; border: 1px solid var(--border);
+      border-radius: 7px; background: var(--surface); color: var(--text); cursor: pointer;
+    }
+    .doc-button:hover { border-color: var(--accent); }
+
+    .doc-main { min-width: 0; }
+    .doc-header { padding: clamp(2rem, 5vw, 5rem) clamp(1.4rem, 6vw, 6.5rem) 2.5rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .doc-header-inner, .doc-content { width: min(100%, 78rem); margin-inline: auto; }
+    .doc-eyebrow { margin: 0 0 1rem; color: var(--accent); font-size: .76rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, h3 { line-height: 1.15; text-wrap: balance; }
+    h1 { max-width: 18ch; margin: 0; font-size: clamp(2.2rem, 6vw, 5.4rem); letter-spacing: -.05em; }
+    .doc-lede { max-width: var(--measure); margin: 1.35rem 0 0; color: var(--text-dim); font-size: clamp(1rem, 1.5vw, 1.24rem); }
+    .doc-meta { display: flex; flex-wrap: wrap; gap: .55rem 1.2rem; margin: 1.5rem 0 0; padding: 0; color: var(--text-dim); list-style: none; font-size: .83rem; }
+    .doc-meta strong { color: var(--text); }
+
+    .doc-content { padding: 1rem clamp(1.4rem, 6vw, 6.5rem) 6rem; }
+    .doc-section { padding: 3.6rem 0; border-bottom: 1px solid var(--border); scroll-margin-top: 1rem; }
+    .doc-section:last-child { border-bottom: 0; }
+    .doc-section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, .7fr); gap: 2rem; align-items: start; margin-bottom: 1.8rem; }
+    .doc-section-heading h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.7rem); letter-spacing: -.025em; }
+    .doc-section-heading p { max-width: var(--measure); margin: 0; color: var(--text-dim); }
+    h3 { margin: 2rem 0 .75rem; font-size: 1.15rem; }
+
+    .doc-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+    .doc-status { min-width: 0; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+    .doc-status span { display: block; color: var(--text-dim); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
+    .doc-status strong { display: block; margin-top: .2rem; font-size: 1.05rem; }
+    .doc-status small { color: var(--text-dim); }
+    .doc-badge { display: inline-flex; align-items: center; gap: .38rem; padding: .17rem .5rem; border: 1px solid currentColor; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+    .doc-badge::before { content: ""; width: .42rem; height: .42rem; border-radius: 50%; background: currentColor; }
+    .is-verified { color: var(--success); }
+    .is-reported { color: var(--info); }
+    .is-unknown { color: var(--unknown); }
+    .is-warning { color: var(--warning); }
+
+    .doc-callout { max-width: var(--measure); margin: 1.4rem 0; padding: 1rem 1.1rem; border-left: 4px solid var(--warning); background: color-mix(in srgb, var(--warning) 9%, var(--surface)); }
+    .doc-callout strong { display: block; margin-bottom: .15rem; }
+    .doc-spec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 0; border-top: 1px solid var(--border); }
+    .doc-spec > div { min-width: 0; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .doc-spec dt { color: var(--text-dim); font-size: .77rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .doc-spec dd { margin: .28rem 0 0; }
+
+    figure { margin: 0; }
+    figcaption { max-width: var(--measure); margin-top: .8rem; color: var(--text-dim); font-size: .88rem; }
+    .doc-diagram-shell { position: relative; min-height: 20rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; box-shadow: var(--shadow); }
+    .doc-diagram-toolbar { display: flex; justify-content: flex-end; gap: .4rem; padding: .65rem; border-bottom: 1px solid var(--border); }
+    .doc-diagram-viewport { min-height: 17rem; overflow: auto; }
+    .doc-diagram-canvas { min-width: 45rem; padding: 2rem; transform-origin: 0 0; }
+    .doc-flow-fallback { display: grid; grid-template-columns: repeat(5, minmax(8rem, 1fr)); gap: 1.7rem; align-items: center; margin: 0; padding: 0; list-style: none; }
+    .doc-flow-fallback li { position: relative; min-width: 0; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-strong); text-align: center; }
+    .doc-flow-fallback li:not(:last-child)::after { content: "→"; position: absolute; right: -1.35rem; top: 50%; color: var(--accent); transform: translateY(-50%); font-weight: 800; }
+    .doc-flow-fallback small { display: block; color: var(--text-dim); }
+    .mermaid-source { display: none; }
+
+    .doc-table-tools { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: space-between; align-items: end; margin-bottom: .65rem; }
+    .doc-table-tools label { display: grid; gap: .3rem; color: var(--text-dim); font-size: .76rem; }
+    .doc-table-tools input { min-width: min(22rem, 70vw); padding: .55rem .65rem; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); }
+    .doc-table-scroll { max-width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    caption { padding: .8rem 1rem; color: var(--text-dim); text-align: left; }
+    th, td { padding: .75rem 1rem; border-top: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--surface-recessed); font-size: .73rem; letter-spacing: .06em; text-transform: uppercase; }
+    tbody tr:hover { background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
+    td:first-child { color: var(--accent); font-family: var(--mono); font-weight: 650; }
+    .doc-no-results { display: none; padding: 1rem; color: var(--text-dim); }
+
+    details { margin: .75rem 0; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+    summary { padding: .8rem 1rem; cursor: pointer; font-weight: 650; }
+    details > :not(summary) { margin-inline: 1rem; }
+    pre { position: relative; max-width: 100%; margin: 0 0 1rem; padding: 1rem; overflow: auto; border-radius: 7px; background: var(--surface-recessed); color: var(--text); font-size: .82rem; line-height: 1.55; }
+    .doc-source-list { padding-left: 1.2rem; }
+    .doc-source-list li { margin: .55rem 0; }
+    .doc-footer { padding: 1.5rem clamp(1.4rem, 6vw, 6.5rem); border-top: 1px solid var(--border); color: var(--text-dim); font-size: .8rem; }
+    .doc-hidden { display: none !important; }
+
+    @media (max-width: 920px) {
+      .doc-shell { grid-template-columns: 1fr; }
+      .doc-sidebar { position: relative; width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+      .doc-nav ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .doc-section-heading { grid-template-columns: 1fr; gap: .7rem; }
+      .doc-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .doc-nav ul, .doc-status-grid, .doc-spec { grid-template-columns: 1fr; }
+      h1 { font-size: 2.35rem; }
+      .doc-header, .doc-content { padding-inline: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+  {{MERMAID_SCRIPT}}
+  {{ECHARTS_SCRIPT}}
+</head>
+<body>
+  <div class="doc-shell">
+    <aside class="doc-sidebar" aria-label="Document navigation">
+      <div class="doc-brand">
+        <p class="doc-kicker">Technical reference</p>
+        <strong>{{SYSTEM_NAME}}</strong>
+        <small>Example starter · replace all illustrative content</small>
+      </div>
+      <div class="doc-search">
+        <label for="doc-search">Search this page</label>
+        <input id="doc-search" type="search" placeholder="Object, field, rule…" autocomplete="off">
+      </div>
+      <nav class="doc-nav" aria-label="Table of contents">
+        <h2>On this page</h2>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#lineage">Lineage</a></li>
+          <li><a href="#specification">Specification</a></li>
+          <li><a href="#columns">Columns</a></li>
+          <li><a href="#operations">Operations</a></li>
+          <li><a href="#sources">Sources</a></li>
+        </ul>
+      </nav>
+      <div class="doc-sidebar-footer">
+        <button class="doc-button" id="theme-toggle" type="button" aria-label="Switch to dark theme">Dark theme</button>
+      </div>
+    </aside>
+
+    <div class="doc-main">
+      <header class="doc-header">
+        <div class="doc-header-inner">
+          <p class="doc-eyebrow">{{SYSTEM_NAME}} · object documentation</p>
+          <h1>{{DOC_TITLE}}</h1>
+          <p class="doc-lede">Replace this sentence with the business purpose, technical boundary, and the decision or operational task this page supports.</p>
+          <ul class="doc-meta" aria-label="Document metadata">
+            <li><strong>Status:</strong> Draft</li>
+            <li><strong>Verified:</strong> Not supplied</li>
+            <li><strong>Owner:</strong> To confirm</li>
+            <li><strong>Environment:</strong> Illustrative</li>
+          </ul>
+        </div>
+      </header>
+
+      <main class="doc-content" id="content">
+        <section class="doc-section" id="overview" data-search-section>
+          <div class="doc-section-heading">
+            <h2>Overview</h2>
+            <p>Give readers enough context to judge whether this is the right object and whether the documentation is safe to rely on.</p>
+          </div>
+          <div class="doc-status-grid">
+            <article class="doc-status"><span>Evidence</span><strong class="is-warning">Template only</strong><small>Replace before publication</small></article>
+            <article class="doc-status"><span>Grain</span><strong>One row per entity/day</strong><small class="is-reported">Illustrative</small></article>
+            <article class="doc-status"><span>Refresh</span><strong>Unknown</strong><small class="is-unknown">Not supplied</small></article>
+            <article class="doc-status"><span>Consumers</span><strong>2 examples</strong><small class="is-reported">Illustrative</small></article>
+          </div>
+          <div class="doc-callout">
+            <strong>Evidence gap</strong>
+            Refresh cadence, production owner, and access classification have not been supplied. Keep this warning visible until verified.
+          </div>
+        </section>
+
+        <section class="doc-section" id="lineage" data-search-section>
+          <div class="doc-section-heading">
+            <h2>Lineage and mechanism</h2>
+            <p>Use Mermaid when topology is the point. This fallback remains readable when Mermaid is absent.</p>
+          </div>
+          <figure>
+            <div class="doc-diagram-shell" role="img" aria-label="Illustrative lineage from source records through transformation to curated object and consumers">
+              <div class="doc-diagram-toolbar" aria-label="Diagram controls">
+                <button class="doc-button" type="button" data-zoom="out" aria-label="Zoom diagram out">−</button>
+                <button class="doc-button" type="button" data-zoom="reset">Reset</button>
+                <button class="doc-button" type="button" data-zoom="in" aria-label="Zoom diagram in">+</button>
+              </div>
+              <div class="doc-diagram-viewport">
+                <div class="doc-diagram-canvas" id="lineage-canvas">
+                  <ol class="doc-flow-fallback" id="lineage-fallback">
+                    <li><strong>Source</strong><small>publishes records</small></li>
+                    <li><strong>Landing</strong><small>retains raw input</small></li>
+                    <li><strong>Transform</strong><small>resolves keys</small></li>
+                    <li><strong>Curated object</strong><small>applies grain</small></li>
+                    <li><strong>Consumers</strong><small>query model</small></li>
+                  </ol>
+                  <pre class="mermaid-source" id="lineage-source">flowchart LR
+  A["Source"] -->|publishes records| B["Landing"]
+  B -->|retains raw input| C["Transform"]
+  C -->|resolves keys| D["Curated object"]
+  D -->|serves governed fields| E["Consumers"]</pre>
+                </div>
+              </div>
+            </div>
+            <figcaption>Illustrative claim: consumers query the curated object only after source records are retained and keys resolve.</figcaption>
+          </figure>
+        </section>
+
+        <section class="doc-section" id="specification" data-search-section>
+          <div class="doc-section-heading">
+            <h2>Object specification</h2>
+            <p>Keep exact identifiers distinct from friendly descriptions. Mark unverified properties instead of guessing.</p>
+          </div>
+          <dl class="doc-spec">
+            <div><dt>Fully qualified name</dt><dd><code>database.schema.object_name</code></dd></div>
+            <div><dt>Object type</dt><dd>View <span class="doc-badge is-reported">Illustrative</span></dd></div>
+            <div><dt>Business purpose</dt><dd>Describe the recognizable outcome this object enables.</dd></div>
+            <div><dt>Technical purpose</dt><dd>Describe what it transforms, constrains, or exposes.</dd></div>
+            <div><dt>Grain</dt><dd>One row per <code>entity_id</code> per <code>effective_date</code> <span class="doc-badge is-reported">Illustrative</span></dd></div>
+            <div><dt>Keys</dt><dd><code>entity_id</code>, <code>effective_date</code></dd></div>
+            <div><dt>Materialization</dt><dd><span class="doc-badge is-unknown">Unknown</span></dd></div>
+            <div><dt>Owner</dt><dd><span class="doc-badge is-unknown">To confirm</span></dd></div>
+          </dl>
+
+          <h3>Transformation logic</h3>
+          <ol>
+            <li>Select eligible source records at the effective timestamp.</li>
+            <li>Resolve the entity key; quarantine unresolved records.</li>
+            <li>Rank duplicates by supplied modification time.</li>
+            <li>Publish one record per final grain.</li>
+          </ol>
+          <p><span class="doc-badge is-reported">Illustrative</span> Replace this logic with verified rules and attach a source locator to each material statement.</p>
+
+          <details>
+            <summary>Example SQL fragment · illustrative</summary>
+            <pre><code>qualify row_number() over (
+  partition by entity_id, effective_date
+  order by source_modified_at desc
+) = 1</code></pre>
+          </details>
+        </section>
+
+        <section class="doc-section" id="columns" data-search-section>
+          <div class="doc-section-heading">
+            <h2>Column dictionary</h2>
+            <p>Tables preserve repeated fields, comparison, copy/paste, and accessibility better than a grid of cards.</p>
+          </div>
+          <div class="doc-table-tools">
+            <label for="column-filter">Filter columns
+              <input id="column-filter" type="search" placeholder="Name, type, definition…">
+            </label>
+            <span class="doc-badge is-reported">All rows illustrative</span>
+          </div>
+          <div class="doc-table-scroll" tabindex="0" aria-label="Scrollable column dictionary">
+            <table id="column-table">
+              <caption>Illustrative columns—replace with inspected schema metadata and verified definitions.</caption>
+              <thead><tr><th>Column</th><th>Type</th><th>Nullable</th><th>Definition</th><th>Source or derivation</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>entity_id</td><td>varchar</td><td>No</td><td>Stable business entity identifier.</td><td><code>source.entity_code</code></td><td>Candidate natural key.</td></tr>
+                <tr><td>effective_date</td><td>date</td><td>No</td><td>Date on which the record applies.</td><td><code>source.as_of_date</code></td><td>Part of final grain.</td></tr>
+                <tr><td>amount</td><td>number(18,2)</td><td>Yes</td><td>Value in the stated currency.</td><td><code>source.amount</code></td><td>Currency behavior unknown.</td></tr>
+              </tbody>
+            </table>
+            <p class="doc-no-results" id="column-no-results">No columns match this filter.</p>
+          </div>
+        </section>
+
+        <section class="doc-section" id="operations" data-search-section>
+          <div class="doc-section-heading">
+            <h2>Operations and change impact</h2>
+            <p>Document how the object behaves in production, how it fails, and what changes could break.</p>
+          </div>
+          <dl class="doc-spec">
+            <div><dt>Trigger / cadence</dt><dd><span class="doc-badge is-unknown">Not supplied</span></dd></div>
+            <div><dt>Freshness target</dt><dd><span class="doc-badge is-unknown">Not supplied</span></dd></div>
+            <div><dt>Failure behavior</dt><dd>Unresolved keys are quarantined <span class="doc-badge is-reported">Illustrative</span></dd></div>
+            <div><dt>Retry / replay</dt><dd><span class="doc-badge is-unknown">To confirm</span></dd></div>
+            <div><dt>Monitoring</dt><dd><span class="doc-badge is-unknown">To confirm</span></dd></div>
+            <div><dt>Access classification</dt><dd><span class="doc-badge is-unknown">Unknown</span></dd></div>
+          </dl>
+          <details>
+            <summary>Known limitations and edge cases</summary>
+            <ul>
+              <li>State whether late-arriving records rewrite history or create a new version.</li>
+              <li>State how duplicate source timestamps are resolved.</li>
+              <li>State whether null amounts differ from zero amounts.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Change-impact checklist</summary>
+            <ul>
+              <li>Downstream models and dashboards inspected.</li>
+              <li>Grain and key compatibility tested.</li>
+              <li>Backfill and rollback behavior agreed.</li>
+              <li>Owner and consumers notified.</li>
+            </ul>
+          </details>
+        </section>
+
+        <section class="doc-section" id="sources" data-search-section>
+          <div class="doc-section-heading">
+            <h2>Sources and verification</h2>
+            <p>Put evidence close to claims and retain a compact source register for maintenance.</p>
+          </div>
+          <ul class="doc-source-list">
+            <li><strong>Executable definition:</strong> <code>path/to/model.sql:1</code> — replace with a real locator.</li>
+            <li><strong>Schema metadata:</strong> <code>database.schema.object_name</code> — not inspected in this template.</li>
+            <li><strong>Operational evidence:</strong> Not supplied.</li>
+          </ul>
+          <p><strong>Verification note:</strong> This starter contains illustrative content only. No production facts should be inferred from it.</p>
+        </section>
+      </main>
+
+      <footer class="doc-footer">Technical documentation starter · HTML is the source of truth.</footer>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeButton = document.getElementById('theme-toggle');
+      const preferred = localStorage.getItem('doc-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+      function setTheme(theme) {
+        root.dataset.theme = theme;
+        localStorage.setItem('doc-theme', theme);
+        const next = theme === 'dark' ? 'light' : 'dark';
+        themeButton.textContent = `${next[0].toUpperCase()}${next.slice(1)} theme`;
+        themeButton.setAttribute('aria-label', `Switch to ${next} theme`);
+      }
+      setTheme(preferred);
+      themeButton.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+      const pageSearch = document.getElementById('doc-search');
+      const sections = [...document.querySelectorAll('[data-search-section]')];
+      pageSearch.addEventListener('input', () => {
+        const query = pageSearch.value.trim().toLowerCase();
+        sections.forEach(section => section.classList.toggle('doc-hidden', Boolean(query) && !section.textContent.toLowerCase().includes(query)));
+      });
+
+      const columnFilter = document.getElementById('column-filter');
+      const rows = [...document.querySelectorAll('#column-table tbody tr')];
+      const noResults = document.getElementById('column-no-results');
+      columnFilter.addEventListener('input', () => {
+        const query = columnFilter.value.trim().toLowerCase();
+        let visible = 0;
+        rows.forEach(row => {
+          const show = !query || row.textContent.toLowerCase().includes(query);
+          row.hidden = !show;
+          visible += show ? 1 : 0;
+        });
+        noResults.style.display = visible ? 'none' : 'block';
+      });
+
+      const links = [...document.querySelectorAll('.doc-nav a')];
+      const observer = new IntersectionObserver(entries => {
+        entries.filter(entry => entry.isIntersecting).forEach(entry => {
+          links.forEach(link => link.removeAttribute('aria-current'));
+          document.querySelector(`.doc-nav a[href="#${entry.target.id}"]`)?.setAttribute('aria-current', 'location');
+        });
+      }, { rootMargin: '-15% 0px -72% 0px' });
+      sections.forEach(section => observer.observe(section));
+
+      let scale = 1;
+      const canvas = document.getElementById('lineage-canvas');
+      document.querySelectorAll('[data-zoom]').forEach(button => button.addEventListener('click', () => {
+        const action = button.dataset.zoom;
+        scale = action === 'reset' ? 1 : Math.max(.65, Math.min(1.7, scale + (action === 'in' ? .1 : -.1)));
+        canvas.style.transform = `scale(${scale})`;
+      }));
+
+      async function renderMermaid() {
+        if (!window.mermaid) return;
+        try {
+          mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict' });
+          const source = document.getElementById('lineage-source').textContent;
+          const rendered = await mermaid.render('lineage-mermaid-svg', source);
+          canvas.innerHTML = rendered.svg;
+        } catch (_) {
+          document.getElementById('lineage-fallback')?.removeAttribute('hidden');
+        }
+      }
+      renderMermaid();
+    })();
+  </script>
+</body>
+</html>
