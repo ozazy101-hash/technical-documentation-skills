@@ -1,0 +1,5 @@
+interface:
+  display_name: "Technical Verification Brief"
+  short_description: "Verify technical changes in a compact HTML brief"
+  default_prompt: "Use $create-technical-verification-brief to inspect these changes and create an evidence-first HTML verification brief."
+
